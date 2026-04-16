@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { logoImages } from '../assets/assets.js';
+import { GiEagleEmblem } from 'react-icons/gi';
 
 export default function ProfessionalSplashScreen({ onComplete }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -10,11 +10,11 @@ export default function ProfessionalSplashScreen({ onComplete }) {
 
   const loadingSteps = useMemo(
     () => [
-      { label: 'Initialisation...', duration: 800 },
-      { label: 'Chargement des ressources...', duration: 1000 },
-      { label: "Configuration de l'interface...", duration: 600 },
-      { label: 'Optimisation des performances...', duration: 700 },
-      { label: 'Finalisation...', duration: 500 },
+      { label: 'Éveil des consciences...', duration: 800 },
+      { label: 'Préparation de votre parcours...', duration: 1000 },
+      { label: 'Connexion aux racines...', duration: 600 },
+      { label: 'VITE : L’action approche...', duration: 700 },
+      { label: 'Bienvenue dans votre univers...', duration: 500 },
     ],
     []
   );
@@ -23,42 +23,25 @@ export default function ProfessionalSplashScreen({ onComplete }) {
     let progressInterval;
     let stepTimeout;
 
-    const runLoadingSequence = () => {
-      if (currentStep < loadingSteps.length) {
-        const step = loadingSteps[currentStep];
+    if (currentStep < loadingSteps.length) {
+      const step = loadingSteps[currentStep];
+      progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          const stepTarget = (currentStep + 1) * (100 / loadingSteps.length);
+          const nextVal = prev + 1;
+          return nextVal > stepTarget ? stepTarget : nextVal;
+        });
+      }, step.duration / 20);
 
-        // Animation de la barre de progression
-        progressInterval = setInterval(() => {
-          setProgress((prev) => {
-            const newProgress =
-              prev + 100 / loadingSteps.length / (step.duration / 50);
-            if (
-              newProgress >=
-              (currentStep + 1) * (100 / loadingSteps.length)
-            ) {
-              clearInterval(progressInterval);
-              return (currentStep + 1) * (100 / loadingSteps.length);
-            }
-            return newProgress;
-          });
-        }, 50);
-
-        // Passer à l'étape suivante
-        stepTimeout = setTimeout(() => {
-          setCurrentStep((prev) => prev + 1);
-        }, step.duration);
-      } else {
-        // Finir le chargement
-        setTimeout(() => {
-          setIsLoading(false);
-          setTimeout(() => {
-            onComplete && onComplete();
-          }, 800);
-        }, 300);
-      }
-    };
-
-    runLoadingSequence();
+      stepTimeout = setTimeout(() => {
+        setCurrentStep((prev) => prev + 1);
+      }, step.duration);
+    } else {
+      setTimeout(() => {
+        setIsLoading(false);
+        setTimeout(() => onComplete && onComplete(), 800);
+      }, 500);
+    }
 
     return () => {
       clearInterval(progressInterval);
@@ -66,165 +49,99 @@ export default function ProfessionalSplashScreen({ onComplete }) {
     };
   }, [currentStep, onComplete, loadingSteps]);
 
- 
-
-  const progressVariants = {
-    initial: { scaleX: 0 },
-    animate: {
-      scaleX: progress / 100,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const exitVariants = {
-    exit: {
-      scale: 0,
-      opacity: 0,
-      transition: {
-        duration: 0.8,
-        ease: 'easeInOut',
-      },
-    },
-  };
-
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={exitVariants.exit}
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
-          style={{
-            background: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${logoImages}) no-repeat center center fixed`,
-            backgroundSize: '50% 250px',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-           
-          }}
+          key="splash"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.8 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-green-950 overflow-hidden"
         >
-          {/* Animated Background */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Floating particles */}
-            <div className="absolute inset-0">
-              {[...Array(20)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-30"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [-20, -40, -20],
-                    opacity: [0.3, 0.8, 0.3],
-                    scale: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    duration: 3 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 2,
-                    ease: 'easeInOut',
-                  }}
-                />
-              ))}
-            </div>
+          {/* Background décoratif */}
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <GiEagleEmblem className="absolute -bottom-20 -right-20 text-[600px] text-white rotate-[-15deg]" />
+          </div>
 
-            {/* Geometric patterns */}
-            <div className="absolute inset-0 opacity-10">
-              <svg
-                className="w-full h-full"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <pattern
-                    id="grid"
-                    width="10"
-                    height="10"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <path
-                      d="M 10 0 L 0 0 0 10"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="0.5"
-                    />
-                  </pattern>
-                </defs>
-                <rect
-                  width="100"
-                  height="100"
-                  fill="url(#grid)"
-                  className="text-white"
+          <div className="relative z-10 w-full max-w-md px-10 text-center">
+            {/* Logo Animé */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="mb-12"
+            >
+              <div className="relative inline-block">
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute -inset-4 border border-lime-400/30 rounded-full"
                 />
-              </svg>
+                <img 
+                  src={logoImages} 
+                  alt="Logo" 
+                  className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-full border-4 border-orange-500 shadow-2xl relative z-10"
+                />
+              </div>
+              <h2 className="text-white font-black text-2xl mt-6 uppercase tracking-[0.3em]">
+                Beverly BM
+              </h2>
+              <div className="h-1 w-12 bg-orange-500 mx-auto mt-2 rounded-full" />
+            </motion.div>
+
+            {/* Barre de progression */}
+            <div className="space-y-4">
+              <div className="h-6 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={currentStep}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    className="text-lime-400 text-xs font-bold uppercase tracking-widest"
+                  >
+                    {loadingSteps[currentStep]?.label}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+
+              <div className="relative h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-orange-500 to-lime-400"
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+
+              <span className="text-orange-400 text-sm font-black">
+                {Math.round(progress)}%
+              </span>
             </div>
           </div>
 
-       
-
-            {/* Loading Steps */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="mb-8"
-            >
-              <div className="text-slate-400 text-sm mb-4 min-h-[20px]">
-                {currentStep < loadingSteps.length && (
-                  <motion.span
-                    key={currentStep}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    {loadingSteps[currentStep]?.label}
-                  </motion.span>
-                )}
-              </div>
-
-              {/* Progress Bar */}
-              <div className="relative w-full h-2 bg-slate-700 rounded-full overflow-hidden">
-                <motion.div
-                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 origin-left"
-                  variants={progressVariants}
-                  initial="initial"
-                  animate="animate"
-                  style={{ scaleX: progress / 100 }}
-                />
-
-                {/* Shimmer effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                />
-              </div>
-
-              {/* Progress Percentage */}
-              <div className="flex justify-between items-center mt-2 text-xs text-slate-500">
-                <span>Chargement</span>
-                <span>{Math.round(progress)}%</span>
-              </div>
-            </motion.div>
-
-            {/* Features Preview */}
-         
-       
-
-          {/* Loading Completion */}
-          
-            
-       
+          {/* Particules flottantes */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(10)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-orange-300 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [0, -100],
+                  opacity: [0, 0.5, 0],
+                }}
+                transition={{
+                  duration: 5 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 5,
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -523,8 +523,8 @@ netlify deploy --prod --dir=dist
 ssh user@server.com
 
 # 2. Cloner le repo
-git clone https://github.com/yourname/louiscar-web.git
-cd louiscar-web
+git clone https://github.com/yourname/verro-site.git
+cd verro-site
 
 # 3. Installer et builder
 npm install

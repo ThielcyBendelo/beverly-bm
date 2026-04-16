@@ -2,31 +2,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import emailService from '../services/emailService';
 import { 
-  FaUser, 
-  FaEnvelope, 
-  FaPhone, 
-  FaBuilding, 
-  FaBriefcase, 
-  FaGlobe, 
-  FaTools, 
-  FaClock, 
-  FaPaperPlane,
-  FaTimes
+  FaUser, FaEnvelope, FaPhone, FaBook, FaCalendarAlt, 
+  FaPaperPlane, FaTimes, FaQuoteLeft, FaMoneyBillWave,
+  FaBuilding, FaBriefcase
 } from 'react-icons/fa';
 
-
 const SERVICES = [
-  { value: 'Gestion de image de marque', label: 'Gestion de l\'image de marque' },
-  { value: 'Maintien en Condition Opérationnelle (MCO)', label: 'Maintien en Condition Opérationnelle (MCO)' },
-  { value: 'Interface Client-Technique', label: 'Interface Client-Technique' },
-  { value: 'Support & Continuité de Service', label: 'Support & Continuité de Service' },
+  { value: 'Coaching Individuel', label: 'Coaching Individuel - Éveil' },
+  { value: 'Conférences & Ateliers', label: 'Conférences & Ateliers' },
+  { value: 'Projet VITE', label: 'Accompagnement Projet VITE' },
+  { value: 'Livre: Le Réveil de la Conscience', label: 'Livre: Le Réveil de la Conscience' },
+  { value: 'Livre: La Voix de la Résilience', label: 'Livre: La Voix de la Résilience' },
 ];
 
 const TIMELINES = [
-  { value: 'urgent', label: "Urgent (moins d'une semaine)" },
+  { value: 'immediat', label: "Immédiat / ASAP" },
   { value: '1-2-semaines', label: '1-2 semaines' },
-  { value: '1-2-mois', label: '1-2 mois' },
-  { value: '3-6-mois', label: '3-6 mois' },
   { value: 'flexible', label: 'Flexible' },
 ];
 
@@ -34,27 +25,23 @@ const initialState = {
   name: '',
   email: '',
   phone: '',
-  company: '',
-  job: '',
-  sector: '',
-  website: '',
+  company: '', // Réintégré
+  sector: '',  // Réintégré
   projectType: '',
-  budget: '',
+  budget: '',  // Réintégré
   timeline: '',
   message: '',
 };
 
 const QuoteModal = ({ isOpen, onClose, defaultService }) => {
   const [formData, setFormData] = useState({ ...initialState, projectType: defaultService || '' });
-  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [errors, setErrors] = useState({});
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setFormData({ ...initialState, projectType: defaultService || '' });
-      setFiles([]);
       setResult(null);
     }
   }, [isOpen, defaultService]);
@@ -64,17 +51,11 @@ const QuoteModal = ({ isOpen, onClose, defaultService }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    setFiles(Array.from(e.target.files));
-  };
-
   const validate = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Nom requis';
     if (!formData.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = 'Email valide requis';
-    if (!formData.projectType) newErrors.projectType = 'Service requis';
-    if (!formData.timeline) newErrors.timeline = 'Délai requis';
-    if (formData.website && !/^https?:\/\/.+\..+/.test(formData.website)) newErrors.website = 'URL valide requise';
+    if (!formData.projectType) newErrors.projectType = 'Sélection requise';
     return newErrors;
   };
 
@@ -83,197 +64,135 @@ const QuoteModal = ({ isOpen, onClose, defaultService }) => {
     const validationErrors = validate();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
+    
     setLoading(true);
-    setResult(null);
     try {
-      const res = await emailService.sendQuoteRequest(formData, files);
+      const res = await emailService.sendQuoteRequest(formData, []);
       setResult(res);
-      if (res.success) setFormData({ ...initialState, projectType: defaultService || '' });
+      if (res.success) {
+        setTimeout(() => onClose(), 2500);
+      }
     } catch {
-      setResult({ success: false, message: "Erreur d'envoi." });
+      setResult({ success: false, message: "Erreur lors de l'envoi." });
     }
     setLoading(false);
-  };
-
-
-  // Focus trap pour accessibilité
-  const modalRef = useRef(null);
-  const firstInputRef = useRef(null);
-  useEffect(() => {
-    if (isOpen && firstInputRef.current) {
-      firstInputRef.current.focus();
-    }
-    // Focus trap
-    const handleTab = (e) => {
-      if (!modalRef.current) return;
-      const focusable = modalRef.current.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])');
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.key === 'Tab') {
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      document.addEventListener('keydown', handleTab);
-    }
-    return () => {
-      document.removeEventListener('keydown', handleTab);
-    };
-  }, [isOpen, onClose]);
-
-  // Gestion fermeture par clic sur overlay
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-green-950/90 backdrop-blur-md p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={handleOverlayClick}
-          aria-modal="true"
-          role="dialog"
+          onClick={(e) => e.target === e.currentTarget && onClose()}
         >
           <motion.div
-            ref={modalRef}
-            className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative overflow-y-auto max-h-[90vh] sm:max-w-md sm:p-4"
-            initial={{ scale: 0.8, y: 60, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 30 } }}
-            exit={{ scale: 0.8, y: 60, opacity: 0, transition: { duration: 0.2 } }}
-            tabIndex={-1}
+            className="bg-white dark:bg-green-900 rounded-[40px] shadow-2xl p-6 md:p-10 w-full max-w-2xl relative overflow-y-auto max-h-[90vh] border border-green-100 dark:border-green-800"
+            initial={{ scale: 0.9, y: 30, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 30, opacity: 0 }}
           >
-            
-            {/* Bouton fermer avec icône */}
-<button
-  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
-  onClick={onClose}
->
-  <FaTimes size={20} />
-</button>
+            <button className="absolute top-6 right-6 text-gray-400 hover:text-orange-500 transition-all" onClick={onClose}>
+              <FaTimes size={24} />
+            </button>
 
-<h2 className="text-2xl font-bold mb-2 text-red-600 text-center">Demander un devis</h2>
-<p className="mb-6 text-gray-500 text-sm text-center px-4">Recevez une proposition personnalisée pour vos projets informatiques et communication.</p>
+            <div className="text-center mb-8">
+              <div className="inline-flex p-3 bg-lime-100 dark:bg-lime-500/20 rounded-2xl text-green-700 dark:text-lime-400 mb-4">
+                <FaQuoteLeft size={20} />
+              </div>
+              <h2 className="text-3xl font-black text-green-900 dark:text-white uppercase tracking-tighter">Votre Demande</h2>
+              <p className="text-gray-500 dark:text-green-100/60 mt-1">Complétez les détails pour un accompagnement sur mesure.</p>
+            </div>
 
-<form onSubmit={handleSubmit} className="space-y-4">
-  {/* NOM */}
-  <div>
-    <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Nom Complet *</label>
-    <div className="relative">
-      <FaUser className="absolute left-3 top-3 text-red-400" />
-      <input 
-        ref={firstInputRef} 
-        type="text" 
-        name="name" 
-        required 
-        value={formData.name} 
-        onChange={handleChange} 
-        className={`w-full bg-gray-50 border rounded-xl pl-10 pr-4 py-2.5 focus:ring-2 transition-all ${errors.name ? 'border-red-500 focus:ring-red-200' : 'border-gray-200 focus:ring-red-400'}`} 
-        placeholder="Louiscar Ingeba"
-      />
-    </div>
-  </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* LIGNE 1 : NOM & EMAIL */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <FaUser className="absolute left-4 top-4 text-orange-500" />
+                  <input type="text" name="name" required value={formData.name} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Nom complet *" />
+                </div>
+                <div className="relative">
+                  <FaEnvelope className="absolute left-4 top-4 text-orange-500" />
+                  <input type="email" name="email" required value={formData.email} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Email *" />
+                </div>
+              </div>
 
-  {/* EMAIL */}
-  <div>
-    <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Email Professionnel *</label>
-    <div className="relative">
-      <FaEnvelope className="absolute left-3 top-3 text-red-400" />
-      <input 
-        type="email" 
-        name="email" 
-        required 
-        value={formData.email} 
-        onChange={handleChange} 
-        className={`w-full bg-gray-50 border rounded-xl pl-10 pr-4 py-2.5 focus:ring-2 transition-all ${errors.email ? 'border-red-500 focus:ring-red-200' : 'border-gray-200 focus:ring-red-400'}`}
-        placeholder="exemple@domaine.com"
-      />
-    </div>
-  </div>
+              {/* LIGNE 2 : TELEPHONE & SOCIETE */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <FaPhone className="absolute left-4 top-4 text-orange-500" />
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Téléphone (WhatsApp)" />
+                </div>
+                <div className="relative">
+                  <FaBuilding className="absolute left-4 top-4 text-orange-500" />
+                  <input type="text" name="company" value={formData.company} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Organisation / Société" />
+                </div>
+              </div>
 
-  <div className="grid grid-cols-2 gap-4">
-    {/* TELEPHONE */}
-    <div>
-      <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Téléphone</label>
-      <div className="relative">
-        <FaPhone className="absolute left-3 top-3 text-red-400" />
-        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-red-400 transition-all" />
-      </div>
-    </div>
-    
-    {/* SOCIÉTÉ */}
-    <div>
-      <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Société</label>
-      <div className="relative">
-        <FaBuilding className="absolute left-3 top-3 text-red-400" />
-        <input type="text" name="company" value={formData.company} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-red-400 transition-all" />
-      </div>
-    </div>
-  </div>
+              {/* LIGNE 3 : SERVICE & BUDGET/PRIX */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <FaBook className="absolute left-4 top-4 text-orange-500" />
+                  <select name="projectType" value={formData.projectType} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none appearance-none focus:ring-2 focus:ring-orange-500 dark:text-white">
+                    <option value="">Sélectionnez *</option>
+                    {SERVICES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
+                </div>
+                <div className="relative">
+                  <FaMoneyBillWave className="absolute left-4 top-4 text-orange-500" />
+                  <input type="text" name="budget" value={formData.budget} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Budget ou Prix estimé" />
+                </div>
+              </div>
 
-  {/* SERVICE (SELECT) */}
-  <div>
-    <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Service Souhaité *</label>
-    <div className="relative">
-      <FaTools className="absolute left-3 top-3 text-red-400 shadow-sm" />
-      <select 
-        name="projectType" 
-        value={formData.projectType} 
-        onChange={handleChange} 
-        className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 appearance-none focus:ring-2 focus:ring-red-400"
-      >
-        <option value="">Choisir un service...</option>
-        {SERVICES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-      </select>
-    </div>
-  </div>
+              {/* LIGNE 4 : DELAI & SECTEUR */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <FaCalendarAlt className="absolute left-4 top-4 text-orange-500" />
+                  <select name="timeline" value={formData.timeline} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none appearance-none focus:ring-2 focus:ring-orange-500 dark:text-white">
+                    <option value="">Délai souhaité</option>
+                    {TIMELINES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
+                </div>
+                <div className="relative">
+                  <FaBriefcase className="absolute left-4 top-4 text-orange-500" />
+                  <input type="text" name="sector" value={formData.sector} onChange={handleChange}
+                    className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-2xl pl-12 pr-4 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                    placeholder="Votre Secteur d'activité" />
+                </div>
+              </div>
 
-  {/* DÉLAI (SELECT) */}
-  <div>
-    <label className="block text-xs font-bold uppercase text-gray-500 mb-1 ml-1">Délai du projet *</label>
-    <div className="relative">
-      <FaClock className="absolute left-3 top-3 text-red-400" />
-      <select 
-        name="timeline" 
-        value={formData.timeline} 
-        onChange={handleChange} 
-        className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 appearance-none focus:ring-2 focus:ring-red-400"
-      >
-        <option value="">Sélectionner un délai...</option>
-        {TIMELINES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-      </select>
-    </div>
-  </div>
+              {/* MESSAGE */}
+              <textarea name="message" value={formData.message} onChange={handleChange}
+                className="w-full bg-gray-50 dark:bg-green-800/50 border border-gray-100 dark:border-green-700 rounded-[30px] p-5 h-28 outline-none focus:ring-2 focus:ring-orange-500 dark:text-white transition-all"
+                placeholder="Dites-m'en plus sur vos attentes ou précisez l'adresse de livraison..." />
 
-  {/* BOUTON ENVOYER */}
-  <button
-    type="submit"
-    disabled={loading}
-    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all transform active:scale-95 disabled:opacity-50 mt-4"
-  >
-    {loading ? (
-      <span className="animate-spin border-2 border-white border-t-transparent rounded-full h-5 w-5"></span>
-    ) : (
-      <>
-        <FaPaperPlane /> Envoyer la demande
-      </>
-    )}
-  </button>
-</form>
+              {result && (
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                  className={`p-4 rounded-2xl text-center font-bold ${result.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  {result.message}
+                </motion.div>
+              )}
+
+              <button type="submit" disabled={loading}
+                className="w-full py-5 bg-green-900 dark:bg-lime-500 text-white dark:text-green-950 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-orange-500 hover:shadow-orange-500/20 transition-all shadow-xl disabled:opacity-50"
+              >
+                {loading ? "Envoi en cours..." : <><FaPaperPlane /> Envoyer ma demande officielle</>}
+              </button>
+            </form>
           </motion.div>
         </motion.div>
       )}

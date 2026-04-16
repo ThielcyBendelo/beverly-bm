@@ -440,7 +440,7 @@ VPS (MANUAL)
 ## 📊 File Structure (Security-focused)
 
 ```
-louiscar-web/
+verro-site/
 │
 ├── 📖 Documentation/
 │   ├── START_HERE.md ..................... COMMENCEZ ICI!

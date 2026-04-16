@@ -380,7 +380,7 @@ Votre application React est maintenant:
 ## 📁 Structure finale
 
 ```
-louiscar-web/
+verro-site/
 ├── src/
 │   ├── services/
 │   │   ├── securityService.js ✅

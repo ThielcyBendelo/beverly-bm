@@ -1,240 +1,241 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+
+// Hooks & Services
 import useParallax from '../hooks/useParallax';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
-
-import LazyImage from './LazyImage';
-import { useEffect, useState } from 'react';
 import notificationService from '../services/notificationService';
-import { profile1Image } from '../assets/assets.js';
-// eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from 'framer-motion';
+
+// Composants & Assets
+import LazyImage from './LazyImage';
 import AnimatedSection from './AnimatedSection';
-import { useNavigate } from 'react-router-dom';
+import { profileImage } from '../assets/assets.js';
+
+// Icônes
+import { 
+  FaHandsHelping, 
+  FaBookOpen, 
+  FaRocket, 
+  FaChartLine, 
+  FaCheckCircle, 
+  FaQuoteLeft 
+} from 'react-icons/fa';
+
 export default function Hero() {
   const scrollY = useParallax();
   const [elementRef] = useIntersectionObserver();
   const navigate = useNavigate();
 
-  // Tableau des backgrounds
   const backgrounds = [
-    '/background7.png',
-    '/background8.png',
-    '/background9.jpeg',
+    '/background11.jpeg',
+    '/background12.jpeg',
+    '/background13.jpeg',
   ];
   const [bgIndex, setBgIndex] = useState(0);
 
-  // Slider automatique
+  // Slider automatique pour le background
   useEffect(() => {
     const timer = setInterval(() => {
       setBgIndex((prev) => (prev + 1) % backgrounds.length);
-    }, 4000); // Change toutes les 4 secondes
+    }, 4000);
     return () => clearInterval(timer);
   }, [backgrounds.length]);
 
-  // Notification de bienvenue après un délai
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      notificationService.welcome();
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <section
-      ref={elementRef}
-      id="home"
-      className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 overflow-hidden"
-    >
-      {/* Background image slider */}
-      <div
-        className="absolute inset-0 w-full h-full transition-all duration-1000"
-        style={{
-          backgroundImage: `url(${backgrounds[bgIndex]})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          filter: 'brightness(0.3)',
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      />
+    <div className="bg-white">
+      {/* ================= SECTION HERO ================= */}
+      <section
+        ref={elementRef}
+        id="home"
+        className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 overflow-hidden"
+      >
+        {/* Background Slider */}
+        <div
+          className="absolute inset-0 w-full h-full transition-all duration-1000"
+          style={{
+            backgroundImage: `url(${backgrounds[bgIndex]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'brightness(0.4)',
+            transform: `translateY(${scrollY * 0.5}px)`,
+          }}
+        />
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dark-100/90 to-dark-100/70 z-10" />
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-green-900/60 via-transparent to-white z-10" />
 
-      {/* Particules flottantes animées */}
-      <div className="absolute inset-0 z-15 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-20">
-        {/* Profile Image avec animation sophistiquée */}
-        <AnimatedSection variant="scaleIn" delay={0.2}>
-          <div className="mb-8 flex justify-center">
+        {/* Particules Animées */}
+        <div className="absolute inset-0 z-15 pointer-events-none">
+          {[...Array(15)].map((_, i) => (
             <motion.div
-              whileHover={{
-                scale: 1.1,
-                rotate: 5,
-                transition: { type: 'spring', stiffness: 300 },
-              }}
-              className="relative"
-            >
-              <LazyImage
-                src={profile1Image}
-                alt="Louiscar Ingeba"
-                className="w-48 h-48 md:w-62 md:h-62 rounded-full object-cover border-4 border-purple shadow-neon-purple relative z-10"
-                 style={{ objectPosition: 'center 10%' }}
-                priority={true}
-                placeholder={
-                  <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-r from-purple to-pink animate-pulse border-4 border-purple" />
-                }
-              />
-              {/* Cercle animé autour de la photo */}
-              <motion.div
-                className="absolute inset-0 rounded-full border-2 border-gradient-to-r from-blue-400 to-purple-500"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              />
-              <motion.div
-                className="absolute inset-[-8px] rounded-full border border-purple-400/30"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              />
-            </motion.div>
-          </div>
-        </AnimatedSection>
+              key={i}
+              className={`absolute w-2 h-2 rounded-full ${i % 2 === 0 ? 'bg-lime-400' : 'bg-orange-500'}`}
+              animate={{ y: [0, -100], opacity: [0, 0.7, 0], scale: [0, 1.5, 0] }}
+              transition={{ duration: Math.random() * 5 + 3, repeat: Infinity, delay: Math.random() * 2 }}
+              style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
+            />
+          ))}
+        </div>
 
-        {/* Titre d'accueil avec animations staggered */}
-        <AnimatedSection variant="slideUp" delay={0.4}>
-          <div className="mb-8 text-center">
-            <motion.h2
-              className="text-2xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-red-500 to-red-300 to-red-200 text-transparent bg-clip-text"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              style={{ backgroundSize: '200% 200%' }}
-            >
-              Louiscar Ingeba
-            </motion.h2>
+        <div className="relative z-20 max-w-5xl">
+          {/* Photo de Profil */}
+          <AnimatedSection variant="scaleIn" delay={0.2}>
+            <div className="mb-8 flex justify-center">
+              <motion.div whileHover={{ scale: 1.05 }} className="relative">
+                <LazyImage
+                  src={profileImage}
+                  alt="Verro Malu Beya"
+                  className="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover border-4 border-lime-400 shadow-[0_0_30px_rgba(163,230,53,0.4)] relative z-10"
+                  style={{ objectPosition: 'center 30%' }}
+                />
+                <motion.div
+                  className="absolute inset-[-10px] rounded-full border-2 border-orange-500/50 border-t-transparent"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                />
+              </motion.div>
+            </div>
+          </AnimatedSection>
 
-            <motion.p
-              className="text-lg md:text-2xl text-red-700 to-red-500 to-red-300 mb-5 font-medium bg-gradient-to-r from-red-400 to-purple-500 text-transparent bg-clip-text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-            >
-              Chargé Relations Publiques & Maintenance Système d'une agence de Développement informatiques                       <span>"MUAMOKEL AGENCY"</span> & Entrpreneur.
-            </motion.p>
+          {/* Titres & Textes */}
+          <AnimatedSection variant="slideUp" delay={0.4}>
+            <div className="mb-10 text-center px-2">
+              <div className="flex justify-center mb-6">
+                <span className="px-4 py-1.5 rounded-full border border-lime-400/30 bg-lime-400/10 text-lime-400 text-xs md:text-sm font-bold uppercase tracking-[0.2em] backdrop-blur-sm">
+                  Coach • Auteur • Entrepreneure
+                </span>
+              </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.8, duration: 0.8, type: 'spring' }}
-            >
-              <motion.p
-                className="text-xl md:text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-500 mb-4"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
+              <h1 className="text-5xl md:text-8xl font-black mb-6 tracking-tight">
+                <span className="bg-gradient-to-r from-white via-white to-orange-400 text-transparent bg-clip-text">
+                  Beverly Malu Beya
+                </span>
+              </h1>
+              
+              <div className="max-w-3xl mx-auto space-y-4">
+                <p className="text-xl md:text-3xl text-white font-light italic leading-tight">
+                  "La voix de la <span className="text-lime-400 font-semibold not-italic">résilience</span> et le guide d'une génération consciente."
+                </p>
+                <div className="flex justify-center items-center gap-4 my-6">
+                  <div className="h-[1px] w-12 bg-orange-500/50"></div>
+                  <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  <div className="h-[1px] w-12 bg-orange-500/50"></div>
+                </div>
+                <p className="text-base md:text-lg text-gray-300 uppercase tracking-widest font-medium">
+                  Expertise : <span className="text-white">Réalités du terrain africain</span>
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* Boutons Hero */}
+          <AnimatedSection variant="slideUp" delay={0.8}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => navigate('/contact')}
+                className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-full font-bold shadow-lg transition-all transform hover:scale-105"
               >
-                Spécialisé en gestion de projets et support technique.
+                Me contacter
+              </button>
+              <button
+                onClick={() => navigate('/projet-vite')}
+                className="px-8 py-4 bg-white text-green-800 border-2 border-green-700 rounded-full font-bold shadow-lg hover:bg-green-50 transition-all transform hover:scale-105"
+              >
+                Découvrir le Projet VITE
+              </button>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
-              </motion.p>
-            </motion.div>
+      {/* ================= SECTION CHIFFRES CLÉS ================= */}
+      <section className="py-20 bg-green-900 text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div className="flex flex-col items-center">
+              <FaChartLine className="text-lime-400 mb-4" size={32} />
+              <span className="text-5xl font-black mb-2">10+</span>
+              <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Ans d'impact</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <FaHandsHelping className="text-lime-400 mb-4" size={32} />
+              <span className="text-5xl font-black mb-2">500+</span>
+              <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Vies Impactées</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <FaBookOpen className="text-lime-400 mb-4" size={32} />
+              <span className="text-5xl font-black mb-2">03</span>
+              <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Livres Publiés</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <FaCheckCircle className="text-lime-400 mb-4" size={32} />
+              <span className="text-5xl font-black mb-2">100%</span>
+              <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Engagement VITE</span>
+            </div>
           </div>
-        </AnimatedSection>
+        </div>
+      </section>
 
-        {/* Boutons avec animations micro-interactions */}
-        <AnimatedSection variant="slideUp" delay={1.0}>
-          <motion.div
-            className="flex gap-4 justify-center"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.2,
-                },
-              },
-            }}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.button
-              type="button"
-              onClick={() => navigate('/contact')}
-              className="group relative px-8 py-3 bg-gradient-to-r from-red-700 to-red-500 to-red-300 to-pink text-white rounded-lg overflow-hidden"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: '0 20px 40px rgba(251, 251, 252, 0.2)',
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="relative z-10 font-semibold">Me contacter</span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-pink-500 to-red-500"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.button>
+      {/* ================= SECTION PILIERS / SERVICES ================= */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <AnimatedSection variant="slideUp">
+            <h2 className="text-4xl md:text-5xl font-black text-green-900 mb-4">Mon Champ d'Action</h2>
+            <p className="text-gray-500 mb-16 max-w-2xl mx-auto">Transformer l'Afrique par l'éveil de la conscience et l'excellence entrepreneuriale.</p>
+          </AnimatedSection>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Coaching */}
+            <div className="group p-10 rounded-[40px] bg-white border border-gray-100 shadow-2xl hover:shadow-lime-500/10 transition-all duration-500 hover:-translate-y-3 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 text-lime-100 group-hover:text-lime-200"><FaHandsHelping size={120} /></div>
+              <div className="relative z-10 text-left">
+                <div className="w-14 h-14 bg-lime-400 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-lime-400/30">
+                  <FaHandsHelping size={28} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-green-900">Éveil & Coaching</h3>
+                <p className="text-gray-600 leading-relaxed">Libérer les consciences et bâtir un leadership civique fort pour la nouvelle génération.</p>
+              </div>
+            </div>
 
-            <motion.button
-              type="button"
-              onClick={() => navigate('/projects')}
-              className="group relative px-8 py-3 bg-dark-300 text-white rounded-lg border border-purple overflow-hidden"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: '0 20px 40px rgba(255, 17, 17, 0.93)',
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="relative z-10 font-semibold">Projets</span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600"
-                initial={{ scale: 0 }}
-                whileHover={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-                style={{ originX: 0.5, originY: 0.5 }}
-              />
-            </motion.button>
-          </motion.div>
-        </AnimatedSection>
-      </div>
+            {/* Auteur */}
+            <div className="group p-10 rounded-[40px] bg-white border border-gray-100 shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 hover:-translate-y-3 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 text-orange-100 group-hover:text-orange-200"><FaBookOpen size={120} /></div>
+              <div className="relative z-10 text-left">
+                <div className="w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-orange-500/30">
+                  <FaBookOpen size={28} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-green-900">Transmission</h3>
+                <p className="text-gray-600 leading-relaxed">Capturer l'essence de la résilience dans des ouvrages dédiés au contexte africain.</p>
+              </div>
+            </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="animate-bounce w-6 h-6 border-2 border-purple rounded-full"></div>
-      </div>
-    </section>
+            {/* Projet VITE */}
+            <div className="group p-10 rounded-[40px] bg-white border border-gray-100 shadow-2xl hover:shadow-green-500/10 transition-all duration-500 hover:-translate-y-3 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 text-green-100 group-hover:text-green-200"><FaRocket size={120} /></div>
+              <div className="relative z-10 text-left">
+                <div className="w-14 h-14 bg-green-700 text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-700/30">
+                  <FaRocket size={28} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-green-900">Projet VITE</h3>
+                <p className="text-gray-600 leading-relaxed">L'entrepreneuriat au service du changement immédiat et durable sur le terrain.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SECTION CITATION ================= */}
+      <section className="py-24 bg-gray-50 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <FaQuoteLeft className="text-lime-400/30 mx-auto mb-8" size={50} />
+          <h2 className="text-2xl md:text-4xl text-green-900 font-light italic leading-relaxed mb-8">
+            L’éveil de la conscience est le premier pas vers la libération de notre potentiel africain. Ne fuyons pas nos réalités, transformons-les.
+          </h2>
+          <div className="h-1 w-20 bg-orange-500 mx-auto mb-4"></div>
+          <p className="text-green-700 font-bold tracking-widest uppercase">Beverly Malu Beya</p>
+        </div>
+      </section>
+    </div>
   );
 }

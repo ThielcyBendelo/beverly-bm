@@ -245,7 +245,7 @@ racine/
 ### Pour le développement:
 
 ```
-louiscar-web/
+verro-site/
 ├── docs/
 │   ├── SECURITY/ ............... Guides sécurité
 │   ├── DEPLOYMENT/ ............ Guides déploiement

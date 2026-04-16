@@ -1,18 +1,18 @@
 // Chemins des images - fichiers servis depuis le dossier public/
-export const projet1 = '/images/projet1.jpg';
-export const projet2 = '/images/projet2.png';
-export const projet3 = '/images/projet3.jpg';
-export const projet4 = '/images/projet4.jpg';
-export const projet5 = '/images/projet5.webp';
-export const projet6 = '/images/projet6.jpg';
-export const predictiveMaintenance = '/images/predictive-maintenance.png';
-export const profileImage = '/images/louiscar.jpeg';
-export const profile1Image = '/images/louiscar.jpeg';
-export const bgImage = '/images/background.jpg';
-export const programmationImage = '/images/image.programmation2.jpg';
-export const reactLogo = '/images/react.svg';
-export const logoImage = '/images/logolouiscar.jpeg';
-export const logoImages = '/images/logolouiscar.jpeg';
+export const projet1 = '/images/projet1.jpeg';
+export const projet2 = '/images/projet2.jpeg';
+export const projet3  = '/images/projet3.jpeg';
+export const projet4 = '/images/projet4.jpeg';
+export const projet5 = '/images/projet5.jpeg';
+export const projet6= '/images/projet6.jpeg';
+export const projet7 = '/images/projet7.png';
+export const profileImage = '/images/beya1.jpeg';
+export const profile1Image = '/images/beya.jpeg';
+export const bgImage = '/images/background.jpeg';
+export const logoImages ='/images/logoBeya.jpeg';
+export const ouvrage1 = '/images/ouvrage1.jpeg';
+export const ouvrage2 = '/images/ouvrage2.jpeg';
+
 
 export const about =
   "Expert en relations publiques doté d'une solide expertise en maintenance système, j'assure la synergie entre la performance technique de nos outils et le rayonnement de notre agence. Mon rôle : garantir que nos systèmes ne tombent jamais et que nos partenariats ne cessent de croître.";
@@ -104,98 +104,96 @@ export const experiences = [
   },
 
 ];
+// --- IMPORT DES IMAGES (Assurez-vous que les fichiers existent ou utilisez des URLs) ---
+// import viteImg1 from './images/vite-lancement.jpg'; 
 
 export const projets = [
   {
-    titre: 'Portfolio React',
-    description: 'Site personnel pour présenter mes projets et compétences.',
-    image: projet1,
-    lienDemo: 'https://github.com/ThielcyBendelo',
-    lienGithub: 'https://github.com/ThielcyBendelo',
-    technologies: ['React', 'Tailwind', 'JavaScript'],
+    titre: 'Lancement VITE - Kinshasa',
+    description: 'Première phase opérationnelle du projet VITE visant l’autonomisation des jeunes entrepreneurs kinois.',
+    image: projet1, // Image Pro
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Entrepreneuriat', 'Terrain', 'Impact'],
     fonctionnalites: [
-      'Design responsive et moderne',
-      'Animations fluides avec Framer Motion',
-      'Navigation intuitive',
-      'Optimisé pour les performances',
+      'Identification de 50 porteurs de projets',
+      'Ateliers de structuration de business plan',
+      'Mise en place d’un réseau de mentorat local',
+      'Accompagnement à la formalisation administrative',
     ],
   },
   {
-    titre: 'Application Todo',
-    description:
-      'Gestion de tâches avec React et localStorage pour une productivité optimale.',
-    image: projet2,
-    lienDemo: 'https://github.com/ThielcyBendelo/todo',
-    lienGithub: 'https://github.com/ThielcyBendelo/todo',
-    technologies: ['React', 'LocalStorage', 'JavaScript'],
+    titre: 'Tournée Éveil des Consciences',
+    description: 'Série de conférences dans les universités de la RDC pour stimuler le leadership citoyen.',
+    image: 'https://unsplash.com',
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Coaching', 'Éducation', 'Leadership'],
     fonctionnalites: [
-      'Ajout et suppression de tâches',
-      'Marquage comme terminé',
-      'Sauvegarde locale',
-      'Interface utilisateur intuitive',
+      'Plus de 5000 étudiants sensibilisés',
+      'Distribution de guides de résilience',
+      'Création de cellules de réflexion locales',
+      'Partenariats avec 5 institutions académiques',
     ],
   },
   {
-    titre: 'E-commerce Platform',
-    description:
-      'Plateforme de commerce électronique moderne et responsive avec gestion complète des produits.',
-    image: projet3,
-    lienDemo: 'https://github.com/ThielcyBendelo/ecommerce',
-    lienGithub: 'https://github.com/ThielcyBendelo/ecommerce',
-    technologies: ['React', 'Node.js', 'MongoDB'],
+    titre: 'Incubateur VITE - Goma',
+    description: 'Extension du Projet VITE dans l’Est pour soutenir la résilience par l’activité économique.',
+    image: 'https://unsplash.com',
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Résilience', 'Innovation', 'Action'],
     fonctionnalites: [
-      'Catalogue de produits dynamique',
-      "Panier d'achat interactif",
-      'Gestion des commandes',
-      'Système de paiement sécurisé',
+      'Soutien aux micro-entreprises de transformation',
+      'Formation en gestion de crise financière',
+      'Accès aux outils digitaux de vente',
+      'Suivi post-incubation de 6 mois',
     ],
   },
   {
-    titre: 'Digital Transformation',
-    description:
-      'Solution de transformation numérique pour entreprises avec intelligence artificielle intégrée.',
-    image: projet4,
-    lienDemo: 'https://github.com/ThielcyBendelo/digital-transform',
-    lienGithub: 'https://github.com/ThielcyBendelo/digital-transform',
-    technologies: ['React', 'Cloud', 'AI'],
+    titre: 'Publication : Guide de Résilience',
+    description: 'Manuel pratique accompagnant la sortie de mon dernier livre pour passer de la lecture à l’application.',
+    image: 'https://unsplash.com',
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Auteur', 'Manuel', 'Pratique'],
     fonctionnalites: [
-      'Analyse de données avancée',
-      'Tableaux de bord interactifs',
-      'Intégration cloud native',
-      'Intelligence artificielle',
+      '30 exercices d’auto-coaching',
+      'Feuilles de route entrepreneuriales',
+      'Espace de prise de notes interactif',
+      'Disponible en version physique et PDF',
     ],
   },
   {
-    titre: 'Système de Maintenance',
-    description:
-      'Application de gestion de maintenance préventive avec IoT et surveillance en temps réel.',
-    image: predictiveMaintenance,
-    lienDemo: 'https://github.com/ThielcyBendelo/maintenance',
-    lienGithub: 'https://github.com/ThielcyBendelo/maintenance',
-    technologies: ['React', 'Python', 'IoT'],
+    titre: 'Programme Mentorat Femmes',
+    description: 'Branche spécifique de VITE dédiée au leadership féminin dans la société congolaise.',
+    image: 'https://unsplash.com',
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Femmes Leaders', 'Empowerment'],
     fonctionnalites: [
-      'Surveillance IoT en temps réel',
-      'Maintenance prédictive',
-      'Alertes automatiques',
-      'Rapports détaillés',
+      'Cercles de parole et d’échange',
+      'Ateliers sur la confiance en soi',
+      'Accompagnement au pitch de projet',
+      'Networking avec des femmes entrepreneures',
     ],
   },
   {
-    titre: 'Formation Tech',
-    description:
-      "Plateforme d'apprentissage en ligne pour développeurs avec cours interactifs et certifications.",
-    image: projet6,
-    lienDemo: 'https://github.com/monportfolio/formation',
-    lienGithub: 'https://github.com/monportfolio/formation',
-    technologies: ['React', 'Express', 'MongoDB'],
+    titre: 'VITE Digital Hub',
+    description: 'Plateforme en ligne centralisant les ressources de formation pour les jeunes éloignés des centres urbains.',
+    image: 'https://unsplash.com',
+    lienDemo: '#',
+    lienGithub: '#',
+    technologies: ['Digital', 'Formation', 'Accessibilité'],
     fonctionnalites: [
-      'Cours interactifs et vidéos',
-      'Système de progression',
-      'Certifications en ligne',
-      "Communauté d'apprentissage",
+      'Cours en ligne accessibles hors-connexion',
+      'Bibliothèque numérique de livres inspirants',
+      'Forum d’entraide entre membres VITE',
+      'Système de certification VITE-Action',
     ],
   },
 ];
+
 
 export const works = [
   // 'Direction de projet e-commerce multilingue (équipe de 10 développeurs)',
@@ -207,22 +205,22 @@ export const works = [
 ];
 
 export const contact = [
-  { label: 'Email', link: 'ingebalouiscar@gmail.com' },
+  { label: 'Email', link: 'beverlymalu04@gmail.com' },
   {
     label: 'LinkedIn',
-    link: 'https://linkedin.com/in/louiscar-699734222?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+    link: 'https://linkedin.com/in/',
   },
   // { label: 'GitHub', link: 'https://github.com/' },
   {
     label: 'Instagram',
-    link: 'https://instagram.com/louiscarfernandez?igsh=MjB3ODdzMDI4dGto',
+    link: 'https://instagram.com/',
   },
   {
     label: 'Facebook',
-    link: 'https://facebook.com/louiscar.fernandez',
+    link: 'https://facebook.com/',
   },
-  // {
-  //   label: 'WhatsApp',
-  //   link: 'https://wa.me/',
-  // },
+  {
+    label: 'WhatsApp',
+    link: 'https://wa.me/',
+  },
 ];
