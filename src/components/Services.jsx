@@ -121,7 +121,7 @@ export default function Services() {
 
                 {/* Bouton Secondaire : Contact direct */}
                 <a
-                  href={`mailto:ingebalouiscar@gmail.com?subject=Information sur le ${service.title}`}
+                  href={`mailto:beverlymalu04@gmail.com?subject=Information sur le ${service.title}`}
                   className="flex items-center justify-center gap-2 w-full py-3 border-2 border-green-900 dark:border-lime-500 text-green-900 dark:text-lime-500 rounded-2xl font-bold hover:bg-green-50 dark:hover:bg-green-800 transition-all duration-300"
                 >
                   <FaEnvelope /> Échanger par Email

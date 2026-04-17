@@ -74,9 +74,9 @@ export default function NavbarSecured() {
     { href: '/', label: 'Accueil', icon: <FaHome /> },
     { href: '/about', label: 'Ma Vision', icon: <FaUser /> },
     { href: '/services', label: 'Coaching', icon: <GiLoveInjection /> },
-    { href: '/skills', label: 'Livres', icon: <FaBook /> },
-    { href: '/projects', label: 'Projets', icon: <GiEagleEmblem /> },
-    { href: '/experience', label: 'Blog', icon: <FaEnvelope size={14}/> },
+    // { href: '/skills', label: 'Livres', icon: <FaBook /> },
+    // { href: '/projects', label: 'Projets', icon: <GiEagleEmblem /> },
+    // { href: '/experience', label: 'Blog', icon: <FaEnvelope size={14}/> },
     // { href: '/work', label: 'Associés', icon: <FaUser /> },
   ];
 

@@ -155,22 +155,22 @@ export default function Hero() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             <div className="flex flex-col items-center">
               <FaChartLine className="text-lime-400 mb-4" size={32} />
-              <span className="text-5xl font-black mb-2">10+</span>
+              <span className="text-5xl font-black mb-2">+</span>
               <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Ans d'impact</span>
             </div>
             <div className="flex flex-col items-center">
               <FaHandsHelping className="text-lime-400 mb-4" size={32} />
-              <span className="text-5xl font-black mb-2">500+</span>
+              <span className="text-5xl font-black mb-2">+</span>
               <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Vies Impactées</span>
             </div>
             <div className="flex flex-col items-center">
               <FaBookOpen className="text-lime-400 mb-4" size={32} />
-              <span className="text-5xl font-black mb-2">03</span>
+              <span className="text-5xl font-black mb-2">En cours...</span>
               <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Livres Publiés</span>
             </div>
             <div className="flex flex-col items-center">
               <FaCheckCircle className="text-lime-400 mb-4" size={32} />
-              <span className="text-5xl font-black mb-2">100%</span>
+              <span className="text-5xl font-black mb-2">%</span>
               <span className="text-xs uppercase tracking-widest text-lime-400/70 font-bold">Engagement VITE</span>
             </div>
           </div>
